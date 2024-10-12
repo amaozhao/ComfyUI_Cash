@@ -1,0 +1,15 @@
+[project]
+name = "comfyui_cash"
+description = ""
+version = "1.0.0"
+license = {file = "LICENSE"}
+dependencies = ["websockets", "aiohttp"]
+
+[project.urls]
+Repository = "https://github.com/amaozhao/ComfyUI_Cash"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = ""
+DisplayName = "ComfyUI_Cash"
+Icon = ""
