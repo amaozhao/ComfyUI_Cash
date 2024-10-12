@@ -49,10 +49,10 @@ YouTube：https://youtu.be/5lJn-NHtc9w
 ### SD变现宝示例工作流
 点此下载[SD变现宝示例工作流](assets/SD变现宝示例工作流.json)。该工作流只为展现ComfyUI_Bxb插件的功能，比较简单，所以出图质量不好。但您可以把ComfyUI_Bxb插件放到您的任意工作流中，实现一键转换。
 ### ComfyUI插件端截屏
-![Intro Image](assets/sdbxb1.png) 
-![Intro Image](assets/sdbxb2.png) 
+![Intro Image](assets/sdxjb1.png) 
+![Intro Image](assets/sdxjb2.png) 
 ### 商家管理端截屏
-![Intro Image](assets/sjduan.jpg) 
+![Intro Image](assets/author_endpoint.jpg) 
 ### 用户端截屏
-![Intro Image](assets/yhduan1.jpg) 
-![Intro Image](assets/yhduan2.jpg) 
+![Intro Image](assets/user_endpoint1.jpg) 
+![Intro Image](assets/user_endpoint2.jpg) 

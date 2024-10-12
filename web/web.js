@@ -275,11 +275,11 @@ function getPostData(prompt) {
         HuiseN['cs_text2_desc'] = HuiseO['custom_text2_desc'];
         HuiseN['cs_text3_desc'] = HuiseO['custom_text3_desc'];
         HuiseN['uniqueid'] = HuiseO['uniqueid'];
-        postData['zhutus'] = [];
+        postData['mainImages'] = [];
         if (HuiseN['zhutu1']) {
             if (output[HuiseN['zhutu1'][0]].class_type == 'LoadImage') {
                 if (output[HuiseN['zhutu1'][0]].inputs.image) {
-                    postData['zhutus'].push(output[HuiseN['zhutu1'][0]].inputs.image);
+                    postData['mainImages'].push(output[HuiseN['zhutu1'][0]].inputs.image);
                 }
             } else {
                 return ('“app_img1”只可以连接“LoadImage”节点');
@@ -288,7 +288,7 @@ function getPostData(prompt) {
         if (HuiseN['zhutu2']) {
             if (output[HuiseN['zhutu2'][0]].class_type == 'LoadImage') {
                 if (output[HuiseN['zhutu2'][0]].inputs.image) {
-                    postData['zhutus'].push(output[HuiseN['zhutu2'][0]].inputs.image);
+                    postData['mainImages'].push(output[HuiseN['zhutu2'][0]].inputs.image);
                 }
             } else {
                 return ('“app_img2”只可以连接“LoadImage”节点');
@@ -297,7 +297,7 @@ function getPostData(prompt) {
         if (HuiseN['zhutu3']) {
             if (output[HuiseN['zhutu3'][0]].class_type == 'LoadImage') {
                 if (output[HuiseN['zhutu3'][0]].inputs.image) {
-                    postData['zhutus'].push(output[HuiseN['zhutu3'][0]].inputs.image);
+                    postData['mainImages'].push(output[HuiseN['zhutu3'][0]].inputs.image);
                 }
             } else {
                 return ('“app_img3”只可以连接“LoadImage”节点');
@@ -512,12 +512,12 @@ app.registerExtension({
                         }
                     }
                 )
-                const dstr1 = '1、每创建一个新的“SD变现宝”节点，就对应一个新的作品；';
-                const dstr2 = '2、如有问题，请加官方QQ群：967073981，联系作者咨询。';
-                const dstr3 = '3、视频教程：https://www.bilibili.com/video/BV1Bsg8eeEjv';
-                const directions = $el('div', {id: 'directions'}, ['特殊说明：', $el('br'), dstr1, $el('br'), dstr2, $el('br'), dstr3])
-                const tech_box = $el('div', {id: 'tech_box'}, [tech_button, directions])
-                this.addDOMWidget('select_styles', "btn", tech_box);
+                // const dstr1 = '1、每创建一个新的“SD变现宝”节点，就对应一个新的作品；';
+                // const dstr2 = '2、如有问题，请加官方QQ群：967073981，联系作者咨询。';
+                // const dstr3 = '3、视频教程：https://www.bilibili.com/video/BV1Bsg8eeEjv';
+                // const directions = $el('div', {id: 'directions'}, ['特殊说明：', $el('br'), dstr1, $el('br'), dstr2, $el('br'), dstr3])
+                // const tech_box = $el('div', {id: 'tech_box'}, [tech_button, directions])
+                // this.addDOMWidget('select_styles', "btn", tech_box);
 
                 const inputEl = document.createElement("input");
                 inputEl.setAttribute("type", "text");

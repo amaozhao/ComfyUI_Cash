@@ -499,7 +499,7 @@
     },
     {
       "id": 16,
-      "type": "sdBxb_textInput",
+      "type": "sdCash_textInput",
       "pos": [
         640,
         1190
@@ -525,7 +525,7 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "sdBxb_textInput"
+        "Node name for S&R": "sdCash_textInput"
       },
       "widgets_values": [
         "红头发"
@@ -533,7 +533,7 @@
     },
     {
       "id": 24,
-      "type": "sdBxb",
+      "type": "sdCash",
       "pos": [
         1487,
         662
@@ -626,7 +626,7 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "sdBxb"
+        "Node name for S&R": "sdCash"
       },
       "widgets_values": [
         "这是默认作品标题，请在comfyui中修改",
