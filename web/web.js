@@ -221,7 +221,7 @@ function getPostData(prompt) {
     let postData = {};
     let saveImageNodes = [];
     for (const key in output) {
-        if (output[key].class_type == 'sdBxb') {
+        if (output[key].class_type == 'sdCash') {
             HuiseO = output[key].inputs;
             HuiseNum++;
         }
@@ -230,18 +230,18 @@ function getPostData(prompt) {
         console.log(output[key].class_type)
         console.log(output[key].class_type)
         console.log(output[key].class_type)
-        if (output[key].class_type == 'SaveImage' || output[key].class_type == 'VHS_VideoCombine' || output[key].class_type == 'sdBxb_saveImage') {
+        if (output[key].class_type == 'SaveImage' || output[key].class_type == 'VHS_VideoCombine' || output[key].class_type == 'sdCash_saveImage') {
             output[key].res_node = key;
             saveImageNodes.push(output[key]);
         }
     }
     if (HuiseNum > 1) {
-        return ('工作流中只可以存在1个“SD变现宝”节点');
+        return ('工作流中只可以存在1个“SD现金宝”节点');
     }
     if (saveImageNodes.length < 1) {
-        return ('请确保工作流中有且仅有1个“SaveImgae”、“sdBxb_saveImage”或“VHS_VideoCombine”节点，目前有' + saveImageNodes.length + '个');
+        return ('请确保工作流中有且仅有1个“SaveImgae”、“sdCash_saveImage”或“VHS_VideoCombine”节点，目前有' + saveImageNodes.length + '个');
     } else if (saveImageNodes.length > 1) {
-        return ('请确保工作流中有且仅有1个“SaveImgae”、“sdBxb_saveImage”或“VHS_VideoCombine”节点，目前有' + saveImageNodes.length + '个');
+        return ('请确保工作流中有且仅有1个“SaveImgae”、“sdCash_saveImage”或“VHS_VideoCombine”节点，目前有' + saveImageNodes.length + '个');
     } else {
         postData['res_node'] = saveImageNodes[0].res_node;
     }
@@ -469,15 +469,14 @@ async function request(r, postData) {
 }
 
 app.registerExtension({
-    name: 'sdBxb',
+    name: 'sdCash',
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
-        if (nodeData.name === 'sdBxb') {
+        if (nodeData.name === 'sdCash') {
 
             const onNodeCreated = nodeType.prototype.onNodeCreated;
             nodeType.prototype.onNodeCreated = function () {
                 const r = onNodeCreated ? onNodeCreated?.apply(this, arguments) : undefined;
                 const that = this;
-                const zhanweiIndex = this.widgets.findIndex((w) => w.name === "zhanwei");
                 const tech_button = $el('button.tech_button', {
                         textContent: '点此，工作流转小程序/H5，并获取访问地址', style: {},
                         onclick: async () => {
@@ -512,12 +511,17 @@ app.registerExtension({
                         }
                     }
                 )
-                // const dstr1 = '1、每创建一个新的“SD变现宝”节点，就对应一个新的作品；';
+                const dstr1 = '1、每创建一个新的“SD现金宝”节点，就对应一个新的作品；';
                 // const dstr2 = '2、如有问题，请加官方QQ群：967073981，联系作者咨询。';
                 // const dstr3 = '3、视频教程：https://www.bilibili.com/video/BV1Bsg8eeEjv';
-                // const directions = $el('div', {id: 'directions'}, ['特殊说明：', $el('br'), dstr1, $el('br'), dstr2, $el('br'), dstr3])
-                // const tech_box = $el('div', {id: 'tech_box'}, [tech_button, directions])
-                // this.addDOMWidget('select_styles', "btn", tech_box);
+                const directions = $el(
+                    'div',
+                    {id: 'directions'},
+                    ['特殊说明：', $el('br'), dstr1,
+                        // $el('br'), dstr2, $el('br'), dstr3
+                    ])
+                const tech_box = $el('div', {id: 'tech_box'}, [tech_button, directions])
+                this.addDOMWidget('select_styles', "btn", tech_box);
 
                 const inputEl = document.createElement("input");
                 inputEl.setAttribute("type", "text");

@@ -1,4 +1,3 @@
-import ast
 import hashlib
 import os
 import json
@@ -61,7 +60,7 @@ def delete_key(key, string_io):
 
 
 def read_json_from_file(name, path="json/", type_1="json"):
-    base_url = find_project_root() + "custom_nodes/ComfyUI_Bxb/config/" + path
+    base_url = find_project_root() + "custom_nodes/ComfyUI_Cash/config/" + path
     if not os.path.exists(base_url + name):
         return None
     with open(base_url + name, "r") as f:
@@ -80,7 +79,7 @@ def read_json_from_file(name, path="json/", type_1="json"):
 
 def write_json_to_file(data, name, path="json/", type_1="str"):
 
-    base_url = find_project_root() + "custom_nodes/ComfyUI_Bxb/config/" + path
+    base_url = find_project_root() + "custom_nodes/ComfyUI_Cash/config/" + path
     if not os.path.exists(base_url):
         os.makedirs(base_url)
     if type_1 == "str":
@@ -151,7 +150,7 @@ def get_port_from_cmdline():
                 return int(match.group(1))
             except ValueError:
                 pass
-    return 8188
+    return 8000
 
 
 def get_version():

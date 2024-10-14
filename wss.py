@@ -19,21 +19,18 @@ import threading
 from .public import (
     get_output,
     write_json_to_file,
-    read_json_from_file,
     get_address,
     get_port,
-    generate_unique_client_id,
     get_port_from_cmdline,
     args,
     find_project_root,
-    get_token,
     get_workflow,
 )
 
 os.environ["http_proxy"] = ""
 os.environ["https_proxy"] = ""
 os.environ["no_proxy"] = "*"
-SERVER_1_URI = "wss://tt.9syun.com/wss"
+SERVER_1_URI = "ws://127.0.0.1:8000/ws"
 ADDRESS = get_address()
 PORT = get_port_from_cmdline()
 HTTP_ADDRESS = "http://{}:{}/".format(ADDRESS, PORT)
@@ -472,7 +469,7 @@ async def send_heartbeat_to_server2():
     running, pending = optimized_process_history_data(history_data)
     try:
         file_names = get_filenames(
-            find_project_root() + "custom_nodes/ComfyUI_Bxb/config/json/api/"
+            find_project_root() + "custom_nodes/ComfyUI_Cash/config/json/api/"
         )
         websocket_queue.append(
             {

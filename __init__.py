@@ -1,7 +1,5 @@
-import asyncio
 import json
 import re
-import subprocess
 import time
 import aiohttp
 import server
@@ -21,8 +19,6 @@ from .public import (
     set_token,
     get_token,
     get_version,
-    set_openid,
-    get_openid,
     find_project_root,
     args,
 )
@@ -81,7 +77,8 @@ class SDClient:
 
     def __init__(self, local_port, subdomain):
         self.local_port = local_port
-        self.server_addr = "suidao.9syun.com"
+        # self.server_addr = "183.238.123.189"
+        self.server_addr = "127.0.0.1"
         self.server_port = "7000"
         self.token = "my_secure_token"
         self.subdomain = subdomain
