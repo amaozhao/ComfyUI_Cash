@@ -21,6 +21,7 @@ from .public import (
     get_version,
     find_project_root,
     args,
+    get_client_id,
 )
 import threading
 import folder_paths
@@ -268,10 +269,10 @@ async def tech_zhulu(request):
         json_data["version"] = get_version()
         techsid = get_token()
         upload_url = (
-            "https://tt.9syun.com/app/index.php?i=66&t=0&v=1.0&from=wxapp&tech_client=wx&c=entry&a=wxapp&tech_client=sj&do=ttapp&m=tech_huise&r="
+            "http://aidep.cn:8601/flow/api/upload/?i=66&t=0&v=1.0&from=wxapp&tech_client=wx&c=entry&a=wxapp&tech_client=sj&do=ttapp&m=tech_huise&r="
             + json_data["r"]
-            + "&techsid=we7sid-"
-            + techsid
+            + "&techsid="
+            + techsid + "&client_id=" + get_client_id()
         )
         if json_data["r"] == "comfyui.apiv2.upload":
             output = json_data["postData"]["output"]
@@ -290,8 +291,8 @@ async def tech_zhulu(request):
                         },
                     }
                     return web.Response(status=200, text=json.dumps(err_info))
-                json_data["postData"].pop("output")
-                json_data["postData"].pop("workflow")
+                # json_data["postData"].pop("output")
+                # json_data["postData"].pop("workflow")
                 form_data = aiohttp.FormData()
                 form_data.add_field("json_data", json.dumps(json_data))
                 if "mainImages" in json_data["postData"]:
@@ -299,7 +300,7 @@ async def tech_zhulu(request):
                         with open(input_directory + "/" + item, "rb") as f:
                             file_content = f.read()
                         form_data.add_field(
-                            "mainImages[]",
+                            "mainImages",
                             file_content,
                             filename=os.path.basename(item),
                             content_type="application/octet-stream",
@@ -362,9 +363,7 @@ async def tech_zhulu(request):
                             and "data" in result_data
                             and "techsid" in result_data["data"]["data"]
                         ):
-                            if len(result_data["data"]["data"]["techsid"]) > len(
-                                "12345"
-                            ):
+                            if len(result_data["data"]["data"]["techsid"]) > len("12345"):
                                 set_token(result_data["data"]["data"]["techsid"])
                             pass
                         return web.json_response(result)

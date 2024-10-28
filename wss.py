@@ -19,18 +19,22 @@ import threading
 from .public import (
     get_output,
     write_json_to_file,
+    read_json_from_file,
     get_address,
     get_port,
+    generate_unique_client_id,
     get_port_from_cmdline,
     args,
     find_project_root,
+    get_token,
     get_workflow,
+    get_client_id,
 )
 
 os.environ["http_proxy"] = ""
 os.environ["https_proxy"] = ""
 os.environ["no_proxy"] = "*"
-SERVER_1_URI = "ws://127.0.0.1:8000/ws"
+SERVER_1_URI = f"ws://aidep.cn:8601/ws?clientId={str(get_client_id())}"
 ADDRESS = get_address()
 PORT = get_port_from_cmdline()
 HTTP_ADDRESS = "http://{}:{}/".format(ADDRESS, PORT)
@@ -85,7 +89,6 @@ executor = MonitoredThreadPoolExecutor(max_workers=20)
 
 
 def print_exception_in_chinese(e):
-
     tb = traceback.extract_tb(e.__traceback__)
     if tb:
         filename, line_number, function_name, text = tb[-1]
@@ -162,6 +165,10 @@ async def getHistoryPrompt(prompt_id, type_a=""):
                         if media in output:
                             for item in output[media]:
                                 if "filename" in item:
+                                    if item["subfolder"] is not "":
+                                        item["filename"] = (
+                                            item["subfolder"] + "/" + item["filename"]
+                                        )
                                     result_data.append(
                                         {
                                             "type": "images",
@@ -191,7 +198,7 @@ async def getHistoryPrompt(prompt_id, type_a=""):
         print_exception_in_chinese(e)
         result_data.append({"type": "str", "k": "ok", "v": "0", "text": "异常的信息"})
         response_status = 500
-    submit_url = "https://tt.9syun.com/app/index.php?i=66&t=0&v=1.0&from=wxapp&tech_client=tt&tech_scene=990001&c=entry&a=wxapp&do=ttapp&r=comfyui.resultv2.formSubmitForComfyUi&m=tech_huise"
+    submit_url = "http://aidep.cn:8601/task/completed/?i=66&t=0&v=1.0&from=wxapp&tech_client=tt&tech_scene=990001&c=entry&a=wxapp&do=ttapp&r=comfyui.resultv2.formSubmitForComfyUi&m=tech_huise"
     connector = aiohttp.TCPConnector()
     async with aiohttp.ClientSession(connector=connector) as session:
         try:
@@ -241,7 +248,7 @@ async def send_form_data(session, url, data, prompt_id=None):
                     with open(item["v"], "rb") as f:
                         file_content = f.read()
                     form_data.add_field(
-                        item["k"] + "[]",
+                        item["k"],
                         file_content,
                         filename=os.path.basename(item["v"]),
                         content_type="application/octet-stream",
@@ -287,6 +294,7 @@ async def send_form_data(session, url, data, prompt_id=None):
 
 
 async def server1_receive_messages(websocket, message_type, message_json):
+    print('recieve server1 message')
     if message_type == "init":
         await websocket.send(
             json.dumps(
@@ -298,7 +306,6 @@ async def server1_receive_messages(websocket, message_type, message_json):
                 }
             )
         )
-        pass
     if message_type == "prompt":
         prompt_data = message_json["data"]
         jilu_id = prompt_data["jilu_id"]
@@ -337,6 +344,7 @@ def optimized_process_history_data(history_data_1):
 
 async def server2_receive_messages(websocket, message_type, message_json):
     global send_time
+    print('recieve server2 message')
     if message_type and message_type != "crystools.monitor":
         if message_type == "status" and message_json["data"]["status"]["exec_info"]:
             websocket_queue.append(
@@ -365,7 +373,6 @@ async def server2_receive_messages(websocket, message_type, message_json):
                     "prompt_id": message_json["data"]["prompt_id"],
                 }
             )
-            pass
         if message_type == "executed":
             task_queue_2.put(
                 {
@@ -373,7 +380,6 @@ async def server2_receive_messages(websocket, message_type, message_json):
                     "prompt_id": message_json["data"]["prompt_id"],
                 }
             )
-            pass
         if message_type == "progress":
             pass
         if message_type == "execution_cached" and "prompt_id" in message_json["data"]:
@@ -386,7 +392,7 @@ async def server2_receive_messages(websocket, message_type, message_json):
 
 
 async def receive_messages(websocket, conn_identifier):
-
+    print(f'recieve {conn_identifier} server message')
     if websocket.open:
         try:
             async for message in websocket:
@@ -408,7 +414,6 @@ async def receive_messages(websocket, conn_identifier):
 
 
 async def send_heartbeat():
-
     while True:
         try:
             if (
@@ -418,7 +423,8 @@ async def send_heartbeat():
                 and websocket_conn2.open == True
             ):
                 await send_heartbeat_to_server2()
-                pass
+                await websocket_conn1.send(json.dumps({"type": "heartbeat", "message": "ping"}))
+                await websocket_conn3.send(json.dumps({"type": "heartbeat", "message": "ping"}))
         except Exception as e:
             print_exception_in_chinese(e)
         finally:
@@ -491,7 +497,6 @@ async def send_heartbeat_to_server2():
 
 
 def run_task_in_loop(task, *args, **kwargs):
-
     while True:
         task(*args, **kwargs)
         time.sleep(1)
@@ -536,7 +541,6 @@ async def run_websocket_task_in_loop():
 
 
 def generate_md5_uid_timestamp_filename(original_filename):
-
     timestamp = str(time.time())
     random_number = str(generate_large_random_number(32))
     combined_string = original_filename + timestamp + random_number
@@ -547,7 +551,6 @@ def generate_md5_uid_timestamp_filename(original_filename):
 
 
 async def loca_download_image(url, filename):
-
     dir_name = find_project_root() + "input"
     no_proxy_handler = urllib.request.ProxyHandler({})
     opener = urllib.request.build_opener(no_proxy_handler)
@@ -580,7 +583,6 @@ async def loca_download_image(url, filename):
 
 
 def generate_large_random_number(num_bits):
-
     return random.getrandbits(num_bits)
 
 
@@ -732,7 +734,6 @@ def run_async_task2(prompt_id):
 
 
 def task_3():
-
     while True:
         try:
             task_info = task_queue_1.get()
@@ -770,7 +771,6 @@ def task_4():
 
 
 def print_thread_status():
-
     while True:
         print("\n当前活动线程:")
         for thread in threading.enumerate():
@@ -781,7 +781,6 @@ def print_thread_status():
 
 
 def main_task():
-
     for i in range(10):
         time.sleep(1)
 
@@ -832,7 +831,6 @@ def task5_thread():
 
 
 def start_async_task_in_thread(async_func):
-
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     loop.run_until_complete(async_func())

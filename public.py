@@ -15,11 +15,24 @@ else:
 
 
 def get_address():
-    return args.listen if args.listen != "0.0.0.0" else "127.0.0.1"
+    return args.listen if '0.0.0.0' not in args.listen else '127.0.0.1'
 
 
 def get_port():
     return args.port
+
+
+def get_client_id():
+    base_url = find_project_root() + "custom_nodes/ComfyUI_Cash/config/"
+    if not os.path.exists(base_url):
+        os.makedirs(base_url)
+    if not os.path.exists(base_url + 'client_id.json'):
+        client_id = uuid.uuid4()
+        with open(os.path.join(base_url, 'client_id.json'), 'w') as f:
+            f.write(str(client_id))
+            return client_id
+    with open(os.path.join(base_url, 'client_id.json'), 'r') as f:
+        return f.read()
 
 
 VERSION = "2.0.0"

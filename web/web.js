@@ -483,7 +483,7 @@ app.registerExtension({
                             if (loading) return;
                             hideCodeBox();
                             try {
-                                const prompt = await app.graphToPrompt()
+                                const prompt = await app.graphToPrompt();
                                 let postData = getPostData(prompt);
                                 if (postData['output']) {
                                     try {
