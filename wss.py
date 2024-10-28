@@ -34,11 +34,11 @@ from .public import (
 os.environ["http_proxy"] = ""
 os.environ["https_proxy"] = ""
 os.environ["no_proxy"] = "*"
-SERVER_1_URI = f"ws://aidep.cn:8601/ws?clientId={str(get_client_id())}"
+SERVER_1_URI = f"ws://aidep.cn:8601//ws?clientId={str(get_client_id())}"
 ADDRESS = get_address()
 PORT = get_port_from_cmdline()
 HTTP_ADDRESS = "http://{}:{}/".format(ADDRESS, PORT)
-new_client_w_id = f"{str(uuid.uuid4())}:{get_port()}"
+new_client_w_id = f"{str(get_client_id())}:{get_port()}"
 SERVER_2_URI = "ws://{}:{}/ws?clientId={}".format(ADDRESS, PORT, new_client_w_id)
 RECONNECT_DELAY = 1
 MAX_RECONNECT_DELAY = 3
@@ -344,7 +344,6 @@ def optimized_process_history_data(history_data_1):
 
 async def server2_receive_messages(websocket, message_type, message_json):
     global send_time
-    print('recieve server2 message')
     if message_type and message_type != "crystools.monitor":
         if message_type == "status" and message_json["data"]["status"]["exec_info"]:
             websocket_queue.append(
@@ -877,7 +876,7 @@ def thread_run():
         target=websocket_thread, args=(SERVER_2_URI, 2), daemon=True
     ).start()
     threading.Thread(
-        target=websocket_thread_fu, args=(SERVER_1_URI, 3), daemon=True
+        target=websocket_thread_fu, args=(SERVER_1_URI + '-3', 3), daemon=True
     ).start()
     threading.Thread(target=task5_thread).start()
     executor.submit(run_task_in_loop, task_4)
