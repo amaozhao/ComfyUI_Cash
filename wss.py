@@ -34,7 +34,7 @@ from .public import (
 os.environ["http_proxy"] = ""
 os.environ["https_proxy"] = ""
 os.environ["no_proxy"] = "*"
-SERVER_1_URI = f"ws://aidep.cn:8601//ws?clientId={str(get_client_id())}"
+SERVER_1_URI = f"ws://aidep.cn:8601/ws?clientId={str(get_client_id())}"
 ADDRESS = get_address()
 PORT = get_port_from_cmdline()
 HTTP_ADDRESS = "http://{}:{}/".format(ADDRESS, PORT)
