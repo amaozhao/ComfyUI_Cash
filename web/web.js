@@ -407,7 +407,7 @@ function getPostData(prompt) {
 
 async function requestExe(r, postData) {
     var techsid = getCookie(techsidkey);
-    const response = await api.fetchApi(`/manager/tech_zhulu`, {
+    const response = await api.fetchApi(`/manager/tech_main`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({

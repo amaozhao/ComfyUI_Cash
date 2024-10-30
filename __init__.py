@@ -260,7 +260,7 @@ def verify_image_exists(path):
     return False
 
 
-@server.PromptServer.instance.routes.post("/manager/tech_zhulu")
+@server.PromptServer.instance.routes.post("/manager/tech_main")
 async def tech_zhulu(request):
     json_data = await request.json()
     if "postData" in json_data and isinstance(json_data["postData"], dict):
@@ -365,7 +365,6 @@ async def tech_zhulu(request):
                         ):
                             if len(result_data["data"]["data"]["techsid"]) > len("12345"):
                                 set_token(result_data["data"]["data"]["techsid"])
-                            pass
                         return web.json_response(result)
                     except json.JSONDecodeError as e:
                         return web.Response(status=resp.status, text=await resp.text())
