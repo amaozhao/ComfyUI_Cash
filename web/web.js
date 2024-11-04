@@ -427,12 +427,17 @@ async function requestExe(r, postData) {
 }
 
 async function login(s_key) {
+    var techsid = getCookie(techsidkey);
+    if (techsid) {
+        return techsid;
+    }
     let res = await requestExe('comfyui.apiv2.code', {s_key: s_key});
+    console.log(res.data.data.data.techsid);
     if (app.ui.dialog.element.style.display != 'none') {
         if (res.data.data.data.techsid.length > 5) {
-            return '123456';
+            return res.data.data.data.techsid;
         } else {
-            await new Promise(resolve => setTimeout(resolve, 800));
+            await new Promise(resolve => setTimeout(resolve, 2000));
             return await login(s_key);
         }
     } else {
@@ -451,8 +456,10 @@ async function request(r, postData) {
                 hideLoading();
                 showQrBox(resdata.data.data.data, resdata.data.data.desc);
                 let techsid = await login(resdata.data.data.s_key);
+                setCookie(techsidkey, techsid, 7);
                 hideCodeBox();
                 if (techsid) {
+                    postData['techsid'] = techsid;
                     return await request(r, postData);
                 } else {
                     return;
@@ -558,36 +565,3 @@ app.registerExtension({
         }
     }
 })
-
-
-//
-// setTimeout(()=>{
-//     import('/huise_admin/input.js')
-// },500)
-//
-//
-// app.registerExtension({
-//     name: "Huise.menu",
-//     async setup() {
-//
-//         const menu = document.querySelector(".comfy-menu");
-//         const huiseButton = document.createElement("button");
-//         huiseButton.textContent = "绘色管理";
-//         huiseButton.style.background = "linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%)";
-//         huiseButton.style.color = "black";
-//         huiseButton.onclick = () => {
-//             // if (!manager_instance){
-//             //     // 引入一个 html 文件，作为弹窗内容
-//             //     api.fetchApi(``, {
-//             //         method: 'POST',
-//             //     }).then(res=>{
-//             //         console.log(res)
-//             //     })
-//             // }
-//             //
-//             //     manager_instance.show();
-//         }
-//         menu.append(huiseButton);
-//
-//     },
-// });

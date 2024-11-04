@@ -126,7 +126,6 @@ def get_token():
         return techsid
     else:
         return "init"
-    pass
 
 
 def set_token(token):
