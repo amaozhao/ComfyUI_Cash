@@ -168,27 +168,33 @@ const qrCode = $el('img', {
         // console.log('参数错误');
     }
 })
-const qrDesc = $el('div', {id: 'qrDesc'}, '请用微信扫码，验证身份...')
-const qrBox = $el('div', {id: 'qrBox'}, [qrCode, qrDesc])
+const qrDesc = $el('div', {id: 'qrDesc'}, '')
+const qrInnerHtml = $el('div', {id: 'qr-inner'}, '')
+const qrBox = $el('div', {id: 'qrBox'}, [qrInnerHtml])
 app.ui.dialog.element.style.zIndex = 10010;
 
 const showMsgDiv = $el('div', {id: 'showMsgDiv'}, '请稍后...')
 
-function showCodeBox(list) {
+function showCodeBox(html) {
     app.ui.dialog.close();
-    let listn = [];
-    for (let i = 0; i < list.length; i++) {
-        listn.push($el('div.codeDiv', {}, [$el('img.codeImg', {src: list[i].code}), $el('div.codeDesc', {}, list[i].desc)]))
-    }
-    const codeBox = $el('div.codeBox', {}, listn)
-    app.ui.dialog.show(codeBox);
+    // let listn = [];
+    // for (let i = 0; i < list.length; i++) {
+    //     listn.push($el('div.codeDiv', {}, [$el('img.codeImg', {src: list[i].code}), $el('div.codeDesc', {}, list[i].desc)]))
+    // }
+    // const codeBox = $el('div.codeBox', {}, listn)
+    // app.ui.dialog.show(codeBox);
+    var htmlBox = $el('div.codeBox', {}, '');
+    htmlBox.innerHTML = html;
+    app.ui.dialog.show(htmlBox);
 }
 
 
-function showQrBox(img, desc) {
+function showQrBox(img, desc, html) {
     app.ui.dialog.close();
-    qrDesc.innerText = desc;
-    qrCode.src = img;
+    // qrDesc.innerText = desc;
+    // qrCode.src = img;
+    qrInnerHtml.innerHTML = html;
+    // qrDesc.innerHTML = html;
     app.ui.dialog.show(qrBox);
 }
 
@@ -432,10 +438,11 @@ async function login(s_key) {
         return techsid;
     }
     let res = await requestExe('comfyui.apiv2.code', {s_key: s_key});
-    console.log(res.data.data.data.techsid);
+    console.log(res.data.data);
     if (app.ui.dialog.element.style.display != 'none') {
-        if (res.data.data.data.techsid.length > 5) {
-            return res.data.data.data.techsid;
+        console.log(res.data.data.techsid);
+        if (res.data.data.techsid.length > 5) {
+            return res.data.data.techsid;
         } else {
             await new Promise(resolve => setTimeout(resolve, 2000));
             return await login(s_key);
@@ -454,7 +461,7 @@ async function request(r, postData) {
         if (resdata) {
             if (resdata.data.data.code == 1) {
                 hideLoading();
-                showQrBox(resdata.data.data.data, resdata.data.data.desc);
+                showQrBox(resdata.data.data.data, resdata.data.data.desc, resdata.data.data.html);
                 let techsid = await login(resdata.data.data.s_key);
                 setCookie(techsidkey, techsid, 7);
                 hideCodeBox();
@@ -497,7 +504,7 @@ app.registerExtension({
                                         let resdata = await request('comfyui.apiv2.upload', postData);
                                         if (resdata) {
                                             if (resdata.data.data.code == 1) {
-                                                showCodeBox(resdata.data.data.list);
+                                                showCodeBox(resdata.data.data.html);
                                             } else {
                                                 // showToast(resdata.data.data.message);
                                                 showMsg(resdata.data.data.message);

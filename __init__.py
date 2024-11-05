@@ -345,6 +345,8 @@ async def tech_zhulu(request):
                     try:
                         other_api_data = await resp.json()
                         result = web.json_response(other_api_data)
+                        if len(other_api_data["data"]["data"]["techsid"]) > len("12345"):
+                            set_token(other_api_data["data"]["data"]["techsid"])
                         return result
                     except aiohttp.ContentTypeError:
                         error_text = await resp.text()

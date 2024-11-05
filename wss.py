@@ -7,7 +7,6 @@ import random
 import time
 import traceback
 import urllib
-import uuid
 import aiohttp
 import urllib.request
 import urllib.parse
@@ -19,14 +18,11 @@ import threading
 from .public import (
     get_output,
     write_json_to_file,
-    read_json_from_file,
     get_address,
     get_port,
-    generate_unique_client_id,
     get_port_from_cmdline,
     args,
     find_project_root,
-    get_token,
     get_workflow,
     get_client_id,
 )
@@ -198,7 +194,7 @@ async def getHistoryPrompt(prompt_id, type_a=""):
         print_exception_in_chinese(e)
         result_data.append({"type": "str", "k": "ok", "v": "0", "text": "异常的信息"})
         response_status = 500
-    submit_url = "http://aidep.cn:8601/task/completed/?i=66&t=0&v=1.0&from=wxapp&tech_client=tt&tech_scene=990001&c=entry&a=wxapp&do=ttapp&r=comfyui.resultv2.formSubmitForComfyUi&m=tech_huise"
+    submit_url = "http://aidep.cn/task/completed/?i=66&t=0&v=1.0&from=wxapp&tech_client=tt&tech_scene=990001&c=entry&a=wxapp&do=ttapp&r=comfyui.resultv2.formSubmitForComfyUi&m=tech_huise"
     connector = aiohttp.TCPConnector()
     async with aiohttp.ClientSession(connector=connector) as session:
         try:
@@ -294,7 +290,6 @@ async def send_form_data(session, url, data, prompt_id=None):
 
 
 async def server1_receive_messages(websocket, message_type, message_json):
-    print('recieve server1 message')
     if message_type == "init":
         await websocket.send(
             json.dumps(
@@ -311,6 +306,7 @@ async def server1_receive_messages(websocket, message_type, message_json):
         jilu_id = prompt_data["jilu_id"]
         uniqueid = message_json["uniqueid"]
         output = get_output(uniqueid + ".json")
+        print('recieve prompt message', jilu_id, uniqueid, output)
         workflow = get_workflow(uniqueid + ".json")
         if output:
             executor.submit(run_async_task, output, prompt_data, workflow, jilu_id)
