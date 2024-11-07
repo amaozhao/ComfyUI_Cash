@@ -30,12 +30,12 @@ from .public import (
 os.environ["http_proxy"] = ""
 os.environ["https_proxy"] = ""
 os.environ["no_proxy"] = "*"
-SERVER_1_URI = f"ws://aidep.cn/ws?clientId={str(get_client_id())}"
+SERVER_1_URI = f"wss://aidep.cn/ws?clientId={str(get_client_id())}"
 ADDRESS = get_address()
 PORT = get_port_from_cmdline()
 HTTP_ADDRESS = "http://{}:{}/".format(ADDRESS, PORT)
 new_client_w_id = f"{str(get_client_id())}:{get_port()}"
-SERVER_2_URI = "ws://{}:{}/ws?clientId={}".format(ADDRESS, PORT, new_client_w_id)
+SERVER_2_URI = "wss://{}:{}/ws?clientId={}".format(ADDRESS, PORT, new_client_w_id)
 RECONNECT_DELAY = 1
 MAX_RECONNECT_DELAY = 3
 task_queue_1 = queue.Queue()
@@ -194,7 +194,7 @@ async def getHistoryPrompt(prompt_id, type_a=""):
         print_exception_in_chinese(e)
         result_data.append({"type": "str", "k": "ok", "v": "0", "text": "异常的信息"})
         response_status = 500
-    submit_url = "http://aidep.cn/task/completed/?i=66&t=0&v=1.0&from=wxapp&tech_client=tt&tech_scene=990001&c=entry&a=wxapp&do=ttapp&r=comfyui.resultv2.formSubmitForComfyUi&m=tech_huise"
+    submit_url = "https://aidep.cn/task/completed/?i=66&t=0&v=1.0&from=wxapp&tech_client=tt&tech_scene=990001&c=entry&a=wxapp&do=ttapp&r=comfyui.resultv2.formSubmitForComfyUi&m=tech_huise"
     connector = aiohttp.TCPConnector()
     async with aiohttp.ClientSession(connector=connector) as session:
         try:

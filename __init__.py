@@ -269,7 +269,7 @@ async def tech_zhulu(request):
         json_data["version"] = get_version()
         techsid = get_token()
         upload_url = (
-            "http://aidep.cn/flow/api/upload/?i=66&t=0&v=1.0&from=wxapp&tech_client=wx&c=entry&a=wxapp&tech_client=sj&do=ttapp&m=tech_huise&r="
+            "https://aidep.cn/flow/api/upload/?i=66&t=0&v=1.0&from=wxapp&tech_client=wx&c=entry&a=wxapp&tech_client=sj&do=ttapp&m=tech_huise&r="
             + json_data["r"]
             + "&techsid="
             + techsid + "&client_id=" + get_client_id()
