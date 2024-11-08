@@ -35,7 +35,7 @@ ADDRESS = get_address()
 PORT = get_port_from_cmdline()
 HTTP_ADDRESS = "http://{}:{}/".format(ADDRESS, PORT)
 new_client_w_id = f"{str(get_client_id())}:{get_port()}"
-SERVER_2_URI = "wss://{}:{}/ws?clientId={}".format(ADDRESS, PORT, new_client_w_id)
+SERVER_2_URI = "ws://{}:{}/ws?clientId={}".format(ADDRESS, PORT, new_client_w_id)
 RECONNECT_DELAY = 1
 MAX_RECONNECT_DELAY = 3
 task_queue_1 = queue.Queue()
