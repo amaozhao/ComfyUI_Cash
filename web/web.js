@@ -438,9 +438,7 @@ async function login(s_key) {
         return techsid;
     }
     let res = await requestExe('comfyui.apiv2.code', {s_key: s_key});
-    console.log(res.data.data);
     if (app.ui.dialog.element.style.display != 'none') {
-        console.log(res.data.data.techsid);
         if (res.data.data.techsid.length > 5) {
             return res.data.data.techsid;
         } else {
