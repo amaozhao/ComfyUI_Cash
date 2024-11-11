@@ -122,12 +122,15 @@ async def websocket_connect(uri, conn_identifier):
                 ]
                 await asyncio.gather(*tasks)
         except websockets.ConnectionClosedError as e:
+            print(11111)
             print_exception_in_chinese(e)
             await asyncio.sleep(reconnect_delay)
         except websockets.ConnectionClosedOK as e:
+            print(22222)
             print_exception_in_chinese(e)
             await asyncio.sleep(reconnect_delay)
         except Exception as e:
+            print(33333, e)
             await asyncio.sleep(reconnect_delay)
         reconnect_delay = min(reconnect_delay * 2, MAX_RECONNECT_DELAY)
 
@@ -387,7 +390,6 @@ async def server2_receive_messages(websocket, message_type, message_json):
 
 
 async def receive_messages(websocket, conn_identifier):
-    print(f'recieve {conn_identifier} server message')
     if websocket.open:
         try:
             async for message in websocket:
@@ -419,11 +421,12 @@ async def send_heartbeat():
             ):
                 await send_heartbeat_to_server2()
                 await websocket_conn1.send(json.dumps({"type": "heartbeat", "message": "ping"}))
-                await websocket_conn3.send(json.dumps({"type": "heartbeat", "message": "ping"}))
+                if websocket_conn3.open is not None and websocket_conn3.open:
+                    await websocket_conn3.send(json.dumps({"type": "heartbeat", "message": "ping"}))
         except Exception as e:
             print_exception_in_chinese(e)
         finally:
-            await asyncio.sleep(10)
+            await asyncio.sleep(5)
 
 
 def get_history():
