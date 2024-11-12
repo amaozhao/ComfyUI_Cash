@@ -227,7 +227,7 @@ function getPostData(prompt) {
     let postData = {};
     let saveImageNodes = [];
     for (const key in output) {
-        if (output[key].class_type == 'sdCash') {
+        if (output[key].class_type == 'DeployCash') {
             HuiseO = output[key].inputs;
             HuiseNum++;
         }
@@ -236,18 +236,18 @@ function getPostData(prompt) {
         console.log(output[key].class_type)
         console.log(output[key].class_type)
         console.log(output[key].class_type)
-        if (output[key].class_type == 'SaveImage' || output[key].class_type == 'VHS_VideoCombine' || output[key].class_type == 'sdCash_saveImage') {
+        if (output[key].class_type == 'SaveImage' || output[key].class_type == 'VHS_VideoCombine' || output[key].class_type == 'DeployCash_saveImage') {
             output[key].res_node = key;
             saveImageNodes.push(output[key]);
         }
     }
     if (HuiseNum > 1) {
-        return ('工作流中只可以存在1个“SD现金宝”节点');
+        return ('工作流中只可以存在1个“DeployCash”节点');
     }
     if (saveImageNodes.length < 1) {
-        return ('请确保工作流中有且仅有1个“SaveImgae”、“sdCash_saveImage”或“VHS_VideoCombine”节点，目前有' + saveImageNodes.length + '个');
+        return ('请确保工作流中有且仅有1个“SaveImgae”、“DeployCash_saveImage”或“VHS_VideoCombine”节点，目前有' + saveImageNodes.length + '个');
     } else if (saveImageNodes.length > 1) {
-        return ('请确保工作流中有且仅有1个“SaveImgae”、“sdCash_saveImage”或“VHS_VideoCombine”节点，目前有' + saveImageNodes.length + '个');
+        return ('请确保工作流中有且仅有1个“SaveImgae”、“DeployCash_saveImage”或“VHS_VideoCombine”节点，目前有' + saveImageNodes.length + '个');
     } else {
         postData['res_node'] = saveImageNodes[0].res_node;
     }
@@ -481,9 +481,9 @@ async function request(r, postData) {
 }
 
 app.registerExtension({
-    name: 'sdCash',
+    name: 'DeployCash',
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
-        if (nodeData.name === 'sdCash') {
+        if (nodeData.name === 'DeployCash') {
 
             const onNodeCreated = nodeType.prototype.onNodeCreated;
             nodeType.prototype.onNodeCreated = function () {

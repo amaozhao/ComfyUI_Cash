@@ -221,7 +221,7 @@ def extract_and_verify_images(output):
     results = {}
     app_img_keys = []
     for key, node in output.items():
-        if node["class_type"] == "sdCash":
+        if node["class_type"] == "DeployCash":
             inputs = node.get("inputs", {})
             for k, v in inputs.items():
                 if k.startswith("app_img") and isinstance(v, list) and len(v) > 0:
@@ -375,7 +375,7 @@ async def do_wss(request):
     pass
 
 
-class sdCash:
+class DeployCash:
     def __init__(self):
         pass
 
@@ -488,10 +488,10 @@ class sdCash:
         }
 
     RETURN_TYPES = ()
-    CATEGORY = "sdCash"
+    CATEGORY = "DeployCash"
 
 
-class sdCash_textInput:
+class DeployCash_textInput:
     def __init__(self):
         pass
 
@@ -508,14 +508,14 @@ class sdCash_textInput:
 
     RETURN_TYPES = ("STRING",)
     FUNCTION = "main"
-    CATEGORY = "sdCash"
+    CATEGORY = "DeployCash"
 
     @staticmethod
     def main(text):
         return (text,)
 
 
-class sdCash_saveImage:
+class DeployCash_saveImage:
     def __init__(self):
         self.output_dir = folder_paths.get_output_directory()
         self.type = "output"
@@ -534,9 +534,9 @@ class sdCash_saveImage:
     RETURN_TYPES = ()
     FUNCTION = "save_images"
     OUTPUT_NODE = True
-    CATEGORY = "sdCash"
+    CATEGORY = "DeployCash"
 
-    def save_images(self, images, filename_prefix="sdCash"):
+    def save_images(self, images, filename_prefix="DeployCash"):
         filename_prefix += self.prefix_append
         full_output_folder, filename, counter, subfolder, filename_prefix = (
             folder_paths.get_save_image_path(
@@ -549,7 +549,7 @@ class sdCash_saveImage:
             img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
             metadata = None
             filename_with_batch_num = filename.replace("%batch_num%", str(batch_number))
-            file = f"sdCash_{filename_with_batch_num}_{counter:05}_.png"
+            file = f"DeployCash_{filename_with_batch_num}_{counter:05}_.png"
             img.save(
                 os.path.join(full_output_folder, file),
                 pnginfo=metadata,
@@ -572,12 +572,12 @@ if os.path.exists(dist_path):
     )
 WEB_DIRECTORY = "./web"
 NODE_CLASS_MAPPINGS = {
-    "sdCash": sdCash,
-    "sdCash_textInput": sdCash_textInput,
-    "sdCash_saveImage": sdCash_saveImage,
+    "DeployCash": DeployCash,
+    "DeployCash_textInput": DeployCash_textInput,
+    "DeployCash_saveImage": DeployCash_saveImage,
 }
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "sdCash": "sdCash",
-    "sdCash_textInput": "textInput",
-    "sdCash_saveImage": "saveImage",
+    "DeployCash": "DeployCash",
+    "DeployCash_textInput": "textInput",
+    "DeployCash_saveImage": "saveImage",
 }
