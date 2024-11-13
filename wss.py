@@ -133,22 +133,19 @@ async def websocket_connect(uri, conn_identifier):
                 ]
                 await asyncio.gather(*tasks)
         except websockets.ConnectionClosedError as e:
-            print(11111)
             print_exception_in_chinese(e)
             await asyncio.sleep(reconnect_delay)
         except websockets.ConnectionClosedOK as e:
-            print(22222)
             print_exception_in_chinese(e)
             await asyncio.sleep(reconnect_delay)
         except Exception as e:
-            print(33333, e)
             await asyncio.sleep(reconnect_delay)
         reconnect_delay = min(reconnect_delay * 2, MAX_RECONNECT_DELAY)
 
 
 def get_history_prompt(prompt_id):
     try:
-        if websocket_conn2 is not None and websocket_conn2.open:
+        if is_websocket_connected(websocket_conn2):
             with urllib.request.urlopen(
                 HTTP_ADDRESS + "history" + "/" + prompt_id
             ) as response:
@@ -283,11 +280,7 @@ async def send_form_data(session, url, data, prompt_id=None):
     async with session.post(url, data=form_data) as response:
         if response.status == 200:
             resp_text = await response.text()
-            if (
-                prompt_id
-                and websocket_conn1 is not None
-                and websocket_conn1.open == True
-            ):
+            if prompt_id and is_websocket_connected(websocket_conn1):
                 websocket_queue.append(
                     {
                         "conn_identifier": 1,
@@ -325,7 +318,7 @@ async def server1_receive_messages(websocket, message_type, message_json):
         if output:
             executor.submit(run_async_task, output, prompt_data, workflow, jilu_id)
         else:
-            if websocket.open:
+            if is_websocket_connected(websocket):
                 websocket_queue.append(
                     {
                         "conn_identifier": 1,
@@ -401,7 +394,7 @@ async def server2_receive_messages(websocket, message_type, message_json):
 
 
 async def receive_messages(websocket, conn_identifier):
-    if websocket.open:
+    if is_websocket_connected(websocket):
         try:
             async for message in websocket:
                 if type(message) != bytes:
@@ -428,7 +421,6 @@ async def send_heartbeat():
                 await send_heartbeat_to_server2()
                 await websocket_conn1.send(json.dumps({"type": "heartbeat", "message": "ping"}))
             if is_websocket_connected(websocket_conn3) and is_websocket_connected(websocket_conn2):
-                await send_heartbeat_to_server2()
                 await websocket_conn3.send(json.dumps({"type": "heartbeat", "message": "ping"}))
         except Exception as e:
             print_exception_in_chinese(e)
@@ -439,7 +431,7 @@ async def send_heartbeat():
 def get_history():
     global last_get_history_time
     try:
-        if websocket_conn2 is not None and websocket_conn2.open == True:
+        if is_websocket_connected(websocket_conn2):
             last_get_history_time = time.time()
             with urllib.request.urlopen(HTTP_ADDRESS + "queue") as response:
                 return json.loads(response.read())
@@ -517,12 +509,7 @@ async def run_websocket_task_in_loop():
             if len(websocket_queue) > 0:
                 websocket_info = websocket_queue.popleft()
                 if "conn_identifier" in websocket_info:
-                    if (
-                        websocket_conn3 is not None
-                        and websocket_conn3.open
-                        and websocket_conn1 is not None
-                        and websocket_conn1.open
-                    ):
+                    if is_websocket_connected(websocket_conn3)  and is_websocket_connected(websocket_conn1):
                         websocket_info["data"]["zhu_client_id"] = new_client_w_id
                         if websocket_info["conn_identifier"] == 1:
                             await websocket_conn3.send(
@@ -593,7 +580,7 @@ def generate_large_random_number(num_bits):
 
 def queue_prompt(prompt, workflow, new_client_id):
     try:
-        if websocket_conn2 is not None and websocket_conn2.open:
+        if is_websocket_connected(websocket_conn2):
             p = {
                 "prompt": prompt,
                 "client_id": new_client_id,
