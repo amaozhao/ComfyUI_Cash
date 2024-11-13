@@ -23,7 +23,7 @@ def get_port():
 
 
 def get_client_id():
-    base_url = find_project_root() + "custom_nodes/ComfyUI_Cash/config/"
+    base_url = find_project_root() + "custom_nodes/ComfyUI_DeployCash/config/"
     if not os.path.exists(base_url):
         os.makedirs(base_url)
     if not os.path.exists(base_url + 'client_id.json'):
@@ -73,7 +73,7 @@ def delete_key(key, string_io):
 
 
 def read_json_from_file(name, path="json/", type_1="json"):
-    base_url = find_project_root() + "custom_nodes/ComfyUI_Cash/config/" + path
+    base_url = find_project_root() + "custom_nodes/ComfyUI_DeployCash/config/" + path
     if not os.path.exists(base_url + name):
         return None
     with open(base_url + name, "r") as f:
@@ -92,7 +92,7 @@ def read_json_from_file(name, path="json/", type_1="json"):
 
 def write_json_to_file(data, name, path="json/", type_1="str"):
 
-    base_url = find_project_root() + "custom_nodes/ComfyUI_Cash/config/" + path
+    base_url = find_project_root() + "custom_nodes/ComfyUI_DeployCash/config/" + path
     if not os.path.exists(base_url):
         os.makedirs(base_url)
     if type_1 == "str":

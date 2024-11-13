@@ -523,9 +523,7 @@ app.registerExtension({
                         }
                     }
                 )
-                const dstr1 = '1、每创建一个新的“SD现金宝”节点，就对应一个新的作品；';
-                // const dstr2 = '2、如有问题，请加官方QQ群：967073981，联系作者咨询。';
-                // const dstr3 = '3、视频教程：https://www.bilibili.com/video/BV1Bsg8eeEjv';
+                const dstr1 = '1、每创建一个新的“DeployCash”节点，就对应一个新的作品；';
                 const directions = $el(
                     'div',
                     {id: 'directions'},
