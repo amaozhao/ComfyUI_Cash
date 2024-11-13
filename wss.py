@@ -419,9 +419,6 @@ async def send_heartbeat():
         try:
             if is_websocket_connected(websocket_conn1) and is_websocket_connected(websocket_conn2):
                 await send_heartbeat_to_server2()
-                await websocket_conn1.send(json.dumps({"type": "heartbeat", "message": "ping"}))
-            if is_websocket_connected(websocket_conn3) and is_websocket_connected(websocket_conn2):
-                await websocket_conn3.send(json.dumps({"type": "heartbeat", "message": "ping"}))
         except Exception as e:
             print_exception_in_chinese(e)
         finally:
