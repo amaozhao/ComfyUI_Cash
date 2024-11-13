@@ -48,6 +48,17 @@ websocket_conn3 = None
 history_data = {"queue_running": [], "queue_pending": []}
 history_prompt_ids = []
 
+WEBSOCKETS_VERSION = tuple(map(int, websockets.__version__.split('.')))
+
+
+def is_websocket_connected(websocket_conn):
+    if websocket_conn is None:
+        return False
+    if WEBSOCKETS_VERSION < (14, 0):
+        return websocket_conn.open
+    else:
+        return websocket_conn.state == 1
+
 
 class MonitoredThreadPoolExecutor(ThreadPoolExecutor):
     def __init__(self, max_workers=None, thread_name_prefix=""):
@@ -413,20 +424,16 @@ async def receive_messages(websocket, conn_identifier):
 async def send_heartbeat():
     while True:
         try:
-            if (
-                websocket_conn1 is not None
-                and websocket_conn1.open == True
-                and websocket_conn2 is not None
-                and websocket_conn2.open == True
-            ):
+            if is_websocket_connected(websocket_conn1) and is_websocket_connected(websocket_conn2):
                 await send_heartbeat_to_server2()
                 await websocket_conn1.send(json.dumps({"type": "heartbeat", "message": "ping"}))
-                if websocket_conn3.open is not None and websocket_conn3.open:
-                    await websocket_conn3.send(json.dumps({"type": "heartbeat", "message": "ping"}))
+            if is_websocket_connected(websocket_conn3) and is_websocket_connected(websocket_conn2):
+                await send_heartbeat_to_server2()
+                await websocket_conn3.send(json.dumps({"type": "heartbeat", "message": "ping"}))
         except Exception as e:
             print_exception_in_chinese(e)
         finally:
-            await asyncio.sleep(5)
+            await asyncio.sleep(10)
 
 
 def get_history():
