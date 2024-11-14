@@ -30,6 +30,7 @@ const cssCode = `
       flex-wrap: wrap;
       justify-content: center;
       width: 360px;
+      margin： auto;
     }
     #qrDesc{
       display: block;
@@ -61,7 +62,7 @@ const cssCode = `
       display: flex;
       text-align: center;
     }
-    #directions{
+    #directions {
       margin-top: 10px;
       width: 100%;
       text-align: left;
