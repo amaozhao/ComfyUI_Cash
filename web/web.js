@@ -243,12 +243,12 @@ function getPostData(prompt) {
         }
     }
     if (HuiseNum > 1) {
-        return ('工作流中只可以存在1个“DeployCash”节点');
+        return ('There can only be one "DeployCash" node in a workflow');
     }
     if (saveImageNodes.length < 1) {
-        return ('请确保工作流中有且仅有1个“SaveImgae”、“DeployCash_saveImage”或“VHS_VideoCombine”节点，目前有' + saveImageNodes.length + '个');
+        return ('Please make sure that there is only one "SaveImgae", "DeployCash_saveImage" or "VHS_VideoCombine" node in the workflow.' + saveImageNodes.length + '');
     } else if (saveImageNodes.length > 1) {
-        return ('请确保工作流中有且仅有1个“SaveImgae”、“DeployCash_saveImage”或“VHS_VideoCombine”节点，目前有' + saveImageNodes.length + '个');
+        return ('Please make sure that there is only one "SaveImgae", "DeployCash_saveImage" or "VHS_VideoCombine" node in the workflow.' + saveImageNodes.length + '');
     } else {
         postData['res_node'] = saveImageNodes[0].res_node;
     }
@@ -289,7 +289,7 @@ function getPostData(prompt) {
                     postData['mainImages'].push(output[HuiseN['zhutu1'][0]].inputs.image);
                 }
             } else {
-                return ('“app_img1”只可以连接“LoadImage”节点');
+                return ('“app_img1” can only connect “LoadImage” node');
             }
         }
         if (HuiseN['zhutu2']) {
@@ -298,7 +298,7 @@ function getPostData(prompt) {
                     postData['mainImages'].push(output[HuiseN['zhutu2'][0]].inputs.image);
                 }
             } else {
-                return ('“app_img2”只可以连接“LoadImage”节点');
+                return ('“app_img2” can only connect “LoadImage” node');
             }
         }
         if (HuiseN['zhutu3']) {
@@ -307,7 +307,7 @@ function getPostData(prompt) {
                     postData['mainImages'].push(output[HuiseN['zhutu3'][0]].inputs.image);
                 }
             } else {
-                return ('“app_img3”只可以连接“LoadImage”节点');
+                return ('“app_img3” can only connect “LoadImage” node');
             }
         }
 
@@ -316,21 +316,21 @@ function getPostData(prompt) {
             if (output[HuiseN['cs_img1'][0]].class_type == 'LoadImage') {
                 postData['cs_img_nodes'].push({node: HuiseN['cs_img1'][0], desc: HuiseN['cs_img1_desc']});
             } else {
-                return ('“custom_img1”只可以连接“LoadImage”节点');
+                return ('“custom_img1” can only connect “LoadImage” node');
             }
         }
         if (HuiseN['cs_img2']) {
             if (output[HuiseN['cs_img2'][0]].class_type == 'LoadImage') {
                 postData['cs_img_nodes'].push({node: HuiseN['cs_img2'][0], desc: HuiseN['cs_img2_desc']});
             } else {
-                return ('“custom_img2”只可以连接“LoadImage”节点');
+                return ('“custom_img2” can only connect “LoadImage” node');
             }
         }
         if (HuiseN['cs_img3']) {
             if (output[HuiseN['cs_img3'][0]].class_type == 'LoadImage') {
                 postData['cs_img_nodes'].push({node: HuiseN['cs_img3'][0], desc: HuiseN['cs_img3_desc']});
             } else {
-                return ('“custom_img3”只可以连接“LoadImage”节点');
+                return ('“custom_img3” can only connect “LoadImage” node');
             }
         }
 
@@ -339,21 +339,21 @@ function getPostData(prompt) {
             if (output[HuiseN['cs_video1'][0]].class_type == 'VHS_LoadVideo') {
                 postData['cs_video_nodes'].push({node: HuiseN['cs_video1'][0], desc: HuiseN['cs_video1_desc']});
             } else {
-                return ('“custom_video1”只可以连接“Load Video (Upload) 🎥🅥🅗🅢”节点');
+                return ('“custom_video1” can only connect “Load Video (Upload) 🎥🅥🅗🅢” node');
             }
         }
         if (HuiseN['cs_video2']) {
             if (output[HuiseN['cs_video2'][0]].class_type == 'VHS_LoadVideo') {
                 postData['cs_video_nodes'].push({node: HuiseN['cs_video2'][0], desc: HuiseN['cs_video2_desc']});
             } else {
-                return ('“custom_video2”只可以连接“Load Video (Upload) 🎥🅥🅗🅢”节点');
+                return ('“custom_video2” can only connect “Load Video (Upload) 🎥🅥🅗🅢” node');
             }
         }
         if (HuiseN['cs_video3']) {
             if (output[HuiseN['cs_video3'][0]].class_type == 'VHS_LoadVideo') {
                 postData['cs_video_nodes'].push({node: HuiseN['cs_video3'][0], desc: HuiseN['cs_video3_desc']});
             } else {
-                return ('“custom_video3”只可以连接“Load Video (Upload) 🎥🅥🅗🅢”节点');
+                return ('“custom_video3” can only connect “Load Video (Upload) 🎥🅥🅗🅢” node');
             }
         }
 
@@ -362,48 +362,48 @@ function getPostData(prompt) {
             if (output[HuiseN['cs_text1'][0]] && typeof output[HuiseN['cs_text1'][0]].inputs !== 'undefined' && typeof output[HuiseN['cs_text1'][0]].inputs.text !== 'undefined') {
                 postData['cs_text_nodes'].push({node: HuiseN['cs_text1'][0], desc: HuiseN['cs_text1_desc']});
             } else {
-                return ('“custom_text1”只可以连接“textInput”节点');
+                return ('“custom_text1” can only connect “textInput” node');
             }
         }
         if (HuiseN['cs_text2']) {
             if (output[HuiseN['cs_text2'][0]] && typeof output[HuiseN['cs_text2'][0]].inputs !== 'undefined' && typeof output[HuiseN['cs_text2'][0]].inputs.text !== 'undefined') {
                 postData['cs_text_nodes'].push({node: HuiseN['cs_text2'][0], desc: HuiseN['cs_text2_desc']});
             } else {
-                return ('“custom_text2”只可以连接“textInput”节点');
+                return ('“custom_text2” can only connect “textInput” node');
             }
         }
         if (HuiseN['cs_text3']) {
             if (output[HuiseN['cs_text3'][0]] && typeof output[HuiseN['cs_text3'][0]].inputs !== 'undefined' && typeof output[HuiseN['cs_text3'][0]].inputs.text !== 'undefined') {
                 postData['cs_text_nodes'].push({node: HuiseN['cs_text3'][0], desc: HuiseN['cs_text3_desc']});
             } else {
-                return ('“custom_text3”只可以连接“textInput”节点');
+                return ('“custom_text3” can only connect “textInput” node');
             }
         }
         if (HuiseN['title']) {
             postData['title'] = HuiseN['title'];
         } else {
-            return ('“app_title”, 不可为空，请填写作品标题');
+            return ('“app_title”, Cannot be empty, please fill in the title of the work');
         }
         if (HuiseN['gn_desc']) {
             postData['gn_desc'] = HuiseN['gn_desc'];
         } else {
-            return ('“app_desc”, 不可为空，请填写作品功能介绍');
+            return ('“app_desc”, Cannot be empty, please fill in the function introduction of the work');
         }
         if (HuiseN['sy_desc']) {
             postData['sy_desc'] = HuiseN['sy_desc'];
         } else {
-            return ('请填写作品使用说明');
+            return ('Please fill in the description of the work');
         }
 
         if (HuiseN['fee'] >= 0) {
             postData['fee'] = HuiseN['fee'];
         } else {
-            return ('“app_fee”不能小于0分，即0元');
+            return ('“app_fee” Cannot be less than 0 points, i.e. 0 $');
         }
         if (HuiseN['free_times'] >= 0) {
             postData['free_times'] = HuiseN['free_times'];
         } else {
-            return ('“free_times”不能小于0');
+            return ('“free_times” Cannot be less than 0');
         }
         postData['uniqueid'] = HuiseN['uniqueid'];
         postData['output'] = output;
@@ -425,7 +425,7 @@ async function requestExe(r, postData) {
     });
     if (!response.ok) {
         setTimeout(() => {
-            showToast('网络连接出错，请保持电脑联网', 3000);
+            showToast('Network connection error, please keep your computer connected to the Internet', 3000);
         }, 300);
         return;
     }
@@ -453,7 +453,7 @@ async function login(s_key) {
 
 
 async function request(r, postData) {
-    showLoading('处理中，请稍后...');
+    showLoading('Processing, please wait...');
     let resdata = await requestExe(r, postData);
     if (resdata.errno == 41009) {
         let resdata = await requestExe('comfyui.apiv2.code', {s_key: ''});
@@ -524,11 +524,11 @@ app.registerExtension({
                         }
                     }
                 )
-                const dstr1 = '1、每创建一个新的“DeployCash”节点，就对应一个新的作品；';
+                const dstr1 = '1. Every time a new "DeployCash" node is created, it corresponds to a new work;';
                 const directions = $el(
                     'div',
                     {id: 'directions'},
-                    ['特殊说明：', $el('br'), dstr1,
+                    ['Special instructions:', $el('br'), dstr1,
                         // $el('br'), dstr2, $el('br'), dstr3
                     ])
                 const tech_box = $el('div', {id: 'tech_box'}, [tech_button, directions])
