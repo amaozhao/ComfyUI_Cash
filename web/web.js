@@ -30,7 +30,7 @@ const cssCode = `
       flex-wrap: wrap;
       justify-content: center;
       width: 360px;
-      margin： auto;
+      margin: auto;
     }
     #qrDesc{
       display: block;
@@ -171,7 +171,7 @@ const qrCode = $el('img', {
 })
 const qrDesc = $el('div', {id: 'qrDesc'}, '')
 const qrInnerHtml = $el('div', {id: 'qr-inner'}, '')
-const qrBox = $el('div', {id: 'qrBox', style: 'margin: auto;'}, [qrInnerHtml])
+const qrBox = $el('div', {id: 'qrBox'}, [qrInnerHtml])
 app.ui.dialog.element.style.zIndex = 10010;
 
 const showMsgDiv = $el('div', {id: 'showMsgDiv'}, '请稍后...')
