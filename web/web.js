@@ -30,7 +30,7 @@ const cssCode = `
       flex-wrap: wrap;
       justify-content: center;
       width: 360px;
-      margin: auto;
+      margin：auto;
     }
     #qrDesc{
       display: block;
@@ -196,6 +196,7 @@ function showQrBox(img, desc, html) {
     // qrCode.src = img;
     qrInnerHtml.innerHTML = html;
     // qrDesc.innerHTML = html;
+    qrBox.style.margin = 'auto';
     app.ui.dialog.show(qrBox);
 }
 
