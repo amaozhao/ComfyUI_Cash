@@ -173,17 +173,44 @@ const qrDesc = $el('div', {id: 'qrDesc'}, '')
 const qrInnerHtml = $el('div', {id: 'qr-inner'}, '')
 const qrBox = $el('div', {id: 'qrBox'}, [qrInnerHtml])
 app.ui.dialog.element.style.zIndex = 10010;
+const lang = getCookie('lang');
 
-const showMsgDiv = $el('div', {id: 'showMsgDiv'}, '请稍后...')
+function getMsgByEnglish(en_str){
+    if (lang == 'en') {
+        return en_str;
+    }
+    const msgDict = {
+        'Please wait...': '请稍后...',
+        'There can only be one "DeployCash" node in a workflow': '工作流中只能有一个"DeployCash"节点',
+        'Please make sure that there is only one "SaveImgae", "DeployCash_saveImage" or "VHS_VideoCombine" node in the workflow.': '请确保工作流中只有一个"SaveImgae"、"DeployCash_saveImage"或"VHS_VideoCombine"节点。',
+        'Instructions for use of works': '作品使用说明',
+        '"app_img1" can only connect "LoadImage" node': '"app_img1" 只能连接 "LoadImage" 节点',
+        '"app_img2" can only connect "LoadImage" node': '"app_img2" 只能连接 "LoadImage" 节点',
+        '"app_img3" can only connect "LoadImage" node': '"app_img3" 只能连接 "LoadImage" 节点',
+        '"custom_img1" can only connect "LoadImage" node': '"custom_img1"只能连接"LoadImage"节点',
+        '"custom_img2" can only connect "LoadImage" node': '"custom_img2"只能连接"LoadImage"节点',
+        '"custom_img3" can only connect "LoadImage" node': '"custom_img3"只能连接"LoadImage"节点',
+        '"custom_video1" can only connect "Load Video (Upload)" node': '"custom_video1" 只能连接"加载视频（上传）"节点',
+        '"custom_video2" can only connect "Load Video (Upload)" node': '"custom_video2" 只能连接"加载视频（上传）"节点',
+        '"custom_video3" can only connect "Load Video (Upload)" node': '"custom_video3" 只能连接"加载视频（上传）"节点',
+        '"custom_text1" can only connect "textInput" node': '"custom_text1"只能连接"textInput"节点',
+        '"custom_text2" can only connect "textInput" node': '"custom_text2"只能连接"textInput"节点',
+        '"custom_text3" can only connect "textInput" node': '"custom_text3"只能连接"textInput"节点',
+        '"app_title", Cannot be empty, please fill in the title of the work': '"app_title"不能为空，请填写作品标题',
+        '"app_desc", Cannot be empty, please fill in the function introduction of the work': '"app_desc"不能为空，请填写作品功能介绍',
+        'Please fill in the description of the work': '请填写作品描述',
+        '"app_fee" Cannot be less than 0 points, i.e. 0 $': '"app_fee"不能小于0积分，即0$',
+        '"free_times" Cannot be less than 0': '"free_times"不能小于0',
+        'Click here to transfer the workflow to the web/H5 and obtain the access address': '点此，工作流转小程序/H5，并获取访问地址',
+        'Processing, please wait...': '正在处理，请稍候...'
+    };
+    return en_str in msgDict ? msgDict[en_str] : '';
+}
+
+const showMsgDiv = $el('div', {id: 'showMsgDiv'}, getMsgByEnglish('Please wait...'));
 
 function showCodeBox(html) {
     app.ui.dialog.close();
-    // let listn = [];
-    // for (let i = 0; i < list.length; i++) {
-    //     listn.push($el('div.codeDiv', {}, [$el('img.codeImg', {src: list[i].code}), $el('div.codeDesc', {}, list[i].desc)]))
-    // }
-    // const codeBox = $el('div.codeBox', {}, listn)
-    // app.ui.dialog.show(codeBox);
     var htmlBox = $el('div.codeBox', {}, '');
     htmlBox.innerHTML = html;
     app.ui.dialog.show(htmlBox);
@@ -244,12 +271,12 @@ function getPostData(prompt) {
         }
     }
     if (HuiseNum > 1) {
-        return ('There can only be one "DeployCash" node in a workflow');
+        return getMsgByEnglish('There can only be one "DeployCash" node in a workflow');
     }
     if (saveImageNodes.length < 1) {
-        return ('Please make sure that there is only one "SaveImgae", "DeployCash_saveImage" or "VHS_VideoCombine" node in the workflow.' + saveImageNodes.length + '');
+        return (getMsgByEnglish('Please make sure that there is only one "SaveImgae", "DeployCash_saveImage" or "VHS_VideoCombine" node in the workflow.') + saveImageNodes.length + '');
     } else if (saveImageNodes.length > 1) {
-        return ('Please make sure that there is only one "SaveImgae", "DeployCash_saveImage" or "VHS_VideoCombine" node in the workflow.' + saveImageNodes.length + '');
+        return (getMsgByEnglish('Please make sure that there is only one "SaveImgae", "DeployCash_saveImage" or "VHS_VideoCombine" node in the workflow.') + saveImageNodes.length + '');
     } else {
         postData['res_node'] = saveImageNodes[0].res_node;
     }
@@ -269,7 +296,7 @@ function getPostData(prompt) {
         HuiseN['cs_text3'] = HuiseO['custom_text3(optional)'];
         HuiseN['title'] = HuiseO['app_title'];
         HuiseN['gn_desc'] = HuiseO['app_desc'];
-        HuiseN['sy_desc'] = '作品使用说明';
+        HuiseN['sy_desc'] = getMsgByEnglish('Instructions for use of works');
         HuiseN['server'] = serverUrl;
         HuiseN['fee'] = HuiseO['app_fee'];
         HuiseN['free_times'] = HuiseO['free_times'];
@@ -290,7 +317,7 @@ function getPostData(prompt) {
                     postData['mainImages'].push(output[HuiseN['zhutu1'][0]].inputs.image);
                 }
             } else {
-                return ('“app_img1” can only connect “LoadImage” node');
+                return getMsgByEnglish('"app_img1" can only connect "LoadImage" node');
             }
         }
         if (HuiseN['zhutu2']) {
@@ -299,7 +326,7 @@ function getPostData(prompt) {
                     postData['mainImages'].push(output[HuiseN['zhutu2'][0]].inputs.image);
                 }
             } else {
-                return ('“app_img2” can only connect “LoadImage” node');
+                return getMsgByEnglish('"app_img2" can only connect "LoadImage" node');
             }
         }
         if (HuiseN['zhutu3']) {
@@ -308,7 +335,7 @@ function getPostData(prompt) {
                     postData['mainImages'].push(output[HuiseN['zhutu3'][0]].inputs.image);
                 }
             } else {
-                return ('“app_img3” can only connect “LoadImage” node');
+                return getMsgByEnglish('"app_img3" can only connect "LoadImage" node');
             }
         }
 
@@ -317,21 +344,21 @@ function getPostData(prompt) {
             if (output[HuiseN['cs_img1'][0]].class_type == 'LoadImage') {
                 postData['cs_img_nodes'].push({node: HuiseN['cs_img1'][0], desc: HuiseN['cs_img1_desc']});
             } else {
-                return ('“custom_img1” can only connect “LoadImage” node');
+                return getMsgByEnglish('"custom_img1" can only connect "LoadImage" node');
             }
         }
         if (HuiseN['cs_img2']) {
             if (output[HuiseN['cs_img2'][0]].class_type == 'LoadImage') {
                 postData['cs_img_nodes'].push({node: HuiseN['cs_img2'][0], desc: HuiseN['cs_img2_desc']});
             } else {
-                return ('“custom_img2” can only connect “LoadImage” node');
+                return getMsgByEnglish('"custom_img2" can only connect "LoadImage" node');
             }
         }
         if (HuiseN['cs_img3']) {
             if (output[HuiseN['cs_img3'][0]].class_type == 'LoadImage') {
                 postData['cs_img_nodes'].push({node: HuiseN['cs_img3'][0], desc: HuiseN['cs_img3_desc']});
             } else {
-                return ('“custom_img3” can only connect “LoadImage” node');
+                return getMsgByEnglish('"custom_img3" can only connect "LoadImage" node');
             }
         }
 
@@ -340,21 +367,21 @@ function getPostData(prompt) {
             if (output[HuiseN['cs_video1'][0]].class_type == 'VHS_LoadVideo') {
                 postData['cs_video_nodes'].push({node: HuiseN['cs_video1'][0], desc: HuiseN['cs_video1_desc']});
             } else {
-                return ('“custom_video1” can only connect “Load Video (Upload) 🎥🅥🅗🅢” node');
+                return getMsgByEnglish('"custom_video1" can only connect "Load Video (Upload)" node');
             }
         }
         if (HuiseN['cs_video2']) {
             if (output[HuiseN['cs_video2'][0]].class_type == 'VHS_LoadVideo') {
                 postData['cs_video_nodes'].push({node: HuiseN['cs_video2'][0], desc: HuiseN['cs_video2_desc']});
             } else {
-                return ('“custom_video2” can only connect “Load Video (Upload) 🎥🅥🅗🅢” node');
+                return getMsgByEnglish('"custom_video2" can only connect "Load Video (Upload)" node');
             }
         }
         if (HuiseN['cs_video3']) {
             if (output[HuiseN['cs_video3'][0]].class_type == 'VHS_LoadVideo') {
                 postData['cs_video_nodes'].push({node: HuiseN['cs_video3'][0], desc: HuiseN['cs_video3_desc']});
             } else {
-                return ('“custom_video3” can only connect “Load Video (Upload) 🎥🅥🅗🅢” node');
+                return getMsgByEnglish('"custom_video3" can only connect "Load Video (Upload)" node');
             }
         }
 
@@ -363,48 +390,48 @@ function getPostData(prompt) {
             if (output[HuiseN['cs_text1'][0]] && typeof output[HuiseN['cs_text1'][0]].inputs !== 'undefined' && typeof output[HuiseN['cs_text1'][0]].inputs.text !== 'undefined') {
                 postData['cs_text_nodes'].push({node: HuiseN['cs_text1'][0], desc: HuiseN['cs_text1_desc']});
             } else {
-                return ('“custom_text1” can only connect “textInput” node');
+                return getMsgByEnglish('"custom_text1" can only connect "textInput" node');
             }
         }
         if (HuiseN['cs_text2']) {
             if (output[HuiseN['cs_text2'][0]] && typeof output[HuiseN['cs_text2'][0]].inputs !== 'undefined' && typeof output[HuiseN['cs_text2'][0]].inputs.text !== 'undefined') {
                 postData['cs_text_nodes'].push({node: HuiseN['cs_text2'][0], desc: HuiseN['cs_text2_desc']});
             } else {
-                return ('“custom_text2” can only connect “textInput” node');
+                return getMsgByEnglish('"custom_text2" can only connect "textInput" node');
             }
         }
         if (HuiseN['cs_text3']) {
             if (output[HuiseN['cs_text3'][0]] && typeof output[HuiseN['cs_text3'][0]].inputs !== 'undefined' && typeof output[HuiseN['cs_text3'][0]].inputs.text !== 'undefined') {
                 postData['cs_text_nodes'].push({node: HuiseN['cs_text3'][0], desc: HuiseN['cs_text3_desc']});
             } else {
-                return ('“custom_text3” can only connect “textInput” node');
+                return getMsgByEnglish('"custom_text3" can only connect "textInput" node');
             }
         }
         if (HuiseN['title']) {
             postData['title'] = HuiseN['title'];
         } else {
-            return ('“app_title”, Cannot be empty, please fill in the title of the work');
+            return getMsgByEnglish('"app_title", Cannot be empty, please fill in the title of the work');
         }
         if (HuiseN['gn_desc']) {
             postData['gn_desc'] = HuiseN['gn_desc'];
         } else {
-            return ('“app_desc”, Cannot be empty, please fill in the function introduction of the work');
+            return getMsgByEnglish('"app_desc", Cannot be empty, please fill in the function introduction of the work');
         }
         if (HuiseN['sy_desc']) {
             postData['sy_desc'] = HuiseN['sy_desc'];
         } else {
-            return ('Please fill in the description of the work');
+            return getMsgByEnglish('Please fill in the description of the work');
         }
 
         if (HuiseN['fee'] >= 0) {
             postData['fee'] = HuiseN['fee'];
         } else {
-            return ('“app_fee” Cannot be less than 0 points, i.e. 0 $');
+            return getMsgByEnglish('"app_fee" Cannot be less than 0 points, i.e. 0 $');
         }
         if (HuiseN['free_times'] >= 0) {
             postData['free_times'] = HuiseN['free_times'];
         } else {
-            return ('“free_times” Cannot be less than 0');
+            return getMsgByEnglish('"free_times" Cannot be less than 0');
         }
         postData['uniqueid'] = HuiseN['uniqueid'];
         postData['output'] = output;
@@ -454,7 +481,7 @@ async function login(s_key) {
 
 
 async function request(r, postData) {
-    showLoading('Processing, please wait...');
+    showLoading(getMsgByEnglish('Processing, please wait...'));
     let resdata = await requestExe(r, postData);
     if (resdata.errno == 41009) {
         let resdata = await requestExe('comfyui.apiv2.code', {s_key: ''});
@@ -492,7 +519,7 @@ app.registerExtension({
                 const r = onNodeCreated ? onNodeCreated?.apply(this, arguments) : undefined;
                 const that = this;
                 const tech_button = $el('button.tech_button', {
-                        textContent: '点此，工作流转小程序/H5，并获取访问地址', style: {},
+                        textContent: getMsgByEnglish('Click here to transfer the workflow to the web/H5 and obtain the access address'), style: {},
                         onclick: async () => {
                             if (loading) return;
                             hideCodeBox();
@@ -504,6 +531,8 @@ app.registerExtension({
                                         let resdata = await request('comfyui.apiv2.upload', postData);
                                         if (resdata) {
                                             if (resdata.data.data.code == 1) {
+                                                var lang = resdata.data.data.lang;
+                                                setCookie('deploy_lang', lang, 7);
                                                 showCodeBox(resdata.data.data.html);
                                             } else {
                                                 // showToast(resdata.data.data.message);
