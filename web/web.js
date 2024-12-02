@@ -173,9 +173,9 @@ const qrDesc = $el('div', {id: 'qrDesc'}, '')
 const qrInnerHtml = $el('div', {id: 'qr-inner'}, '')
 const qrBox = $el('div', {id: 'qrBox'}, [qrInnerHtml])
 app.ui.dialog.element.style.zIndex = 10010;
-const lang = getCookie('lang');
 
 function getMsgByEnglish(en_str){
+    var lang = getCookie('deploy_lang');
     if (lang == 'en') {
         return en_str;
     }
@@ -274,9 +274,9 @@ function getPostData(prompt) {
         return getMsgByEnglish('There can only be one "DeployCash" node in a workflow');
     }
     if (saveImageNodes.length < 1) {
-        return (getMsgByEnglish('Please make sure that there is only one "SaveImgae", "DeployCash_saveImage" or "VHS_VideoCombine" node in the workflow.') + saveImageNodes.length + '');
+        return (getMsgByEnglish('Please make sure that there is only one "SaveImgae", "DeployCash_saveImage" or "VHS_VideoCombine" node in the workflow.'));
     } else if (saveImageNodes.length > 1) {
-        return (getMsgByEnglish('Please make sure that there is only one "SaveImgae", "DeployCash_saveImage" or "VHS_VideoCombine" node in the workflow.') + saveImageNodes.length + '');
+        return (getMsgByEnglish('Please make sure that there is only one "SaveImgae", "DeployCash_saveImage" or "VHS_VideoCombine" node in the workflow.'));
     } else {
         postData['res_node'] = saveImageNodes[0].res_node;
     }
