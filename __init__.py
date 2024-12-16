@@ -126,7 +126,7 @@ async def tech_zhulu(request):
         json_data["version"] = get_version()
         techsid = get_token()
         upload_url = (
-            "https://aidep.cn/flow/api/upload/?i=66&t=0&v=1.0&from=wxapp&tech_client=wx&c=entry&a=wxapp&tech_client=sj&do=ttapp&m=tech_huise&r="
+            "https://test.aidep.cn/flow/api/upload/?i=66&t=0&v=1.0&from=wxapp&tech_client=wx&c=entry&a=wxapp&tech_client=sj&do=ttapp&m=tech_huise&r="
             + json_data["r"]
             + "&techsid="
             + techsid + "&client_id=" + get_client_id()
@@ -173,11 +173,13 @@ async def tech_zhulu(request):
                             result["data"]["data"], dict
                         ):
                             result_data = result["data"]["data"]
+                            print(11111, techsid, result_data["code"])
                             if (
                                 techsid != ""
                                 and techsid != "init"
                                 and result_data["code"] == 1
                             ):
+                                print(22222)
                                 await update_worker_flow(result_data["name"], output)
                                 await update_worker_flow(
                                     result_data["name"], workflow, "workflow/"
